@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Vehicle {
+  id           Int           @id @default(autoincrement())
+  placa        String        @unique
+  modelo       String
+  marca        String
+  ano          Int
+  cor          String
+  foto         String?
+  status       String        @default("disponivel") // disponivel, alugado, manutencao
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  rentals      Rental[]
+  maintenances Maintenance[]
+  inspections  Inspection[]
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  cpf       String   @unique
+  telefone  String
+  email     String?
+  endereco  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rentals   Rental[]
+}
+
+model Rental {
+  id          Int          @id @default(autoincrement())
+  vehicleId   Int
+  clientId    Int
+  dataInicio  DateTime
+  dataFim     DateTime
+  valorDiaria Float
+  valorTotal  Float
+  status      String       @default("ativo") // ativo, finalizado, cancelado
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  vehicle     Vehicle      @relation(fields: [vehicleId], references: [id])
+  client      Client       @relation(fields: [clientId], references: [id])
+  payments    Payment[]
+  inspections Inspection[]
+}
+
+model Payment {
+  id             Int       @id @default(autoincrement())
+  rentalId       Int
+  valor          Float
+  dataVencimento DateTime
+  dataPagamento  DateTime?
+  status         String    @default("pendente") // pendente, pago, parcial, atrasado
+  multa          Float     @default(0)
+  juros          Float     @default(0)
+  valorPago      Float     @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  rental         Rental    @relation(fields: [rentalId], references: [id])
+}
+
+model Maintenance {
+  id        Int      @id @default(autoincrement())
+  vehicleId Int
+  tipo      String   // preventiva, corretiva
+  categoria String   // oleo, pneu, freio, etc
+  custo     Float
+  data      DateTime
+  descricao String
+  km        Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+}
+
+model Inspection {
+  id          Int      @id @default(autoincrement())
+  vehicleId   Int
+  rentalId    Int?
+  data        DateTime
+  tipo        String   // entrada, saida, mensal
+  fotos       String   // JSON array de URLs
+  observacoes String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
+  rental      Rental?  @relation(fields: [rentalId], references: [id])
+}
