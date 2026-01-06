@@ -65,6 +65,7 @@ export default function Inspections() {
       await inspectionService.create({
         ...formData,
         vehicleId: Number(formData.vehicleId),
+        tipo: formData.tipo as 'entrada' | 'saida' | 'mensal',
         fotos,
       });
       setIsModalOpen(false);

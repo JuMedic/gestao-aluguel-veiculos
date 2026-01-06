@@ -45,6 +45,7 @@ export default function MaintenancePage() {
       await maintenanceService.create({
         ...formData,
         vehicleId: Number(formData.vehicleId),
+        tipo: formData.tipo as 'preventiva' | 'corretiva',
       });
       setIsModalOpen(false);
       setFormData({

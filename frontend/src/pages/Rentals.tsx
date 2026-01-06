@@ -47,6 +47,7 @@ export default function Rentals() {
         ...formData,
         vehicleId: Number(formData.vehicleId),
         clientId: Number(formData.clientId),
+        valorDiaria: Number(formData.valorDiaria),
       });
       setIsModalOpen(false);
       setFormData({ vehicleId: '', clientId: '', dataInicio: '', dataFim: '', valorDiaria: '' });

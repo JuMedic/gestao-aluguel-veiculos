@@ -44,11 +44,13 @@ export default function Vehicles() {
         await vehicleService.update(editingVehicle.id, {
           ...formData,
           ano: Number(formData.ano),
+          status: formData.status as 'disponivel' | 'alugado' | 'manutencao',
         });
       } else {
         await vehicleService.create({
           ...formData,
           ano: Number(formData.ano),
+          status: formData.status as 'disponivel' | 'alugado' | 'manutencao',
         });
       }
       setIsModalOpen(false);
