@@ -2,6 +2,52 @@
 
 Sistema completo de gestão de aluguel de veículos desenvolvido com React, TypeScript, Node.js, Express e Prisma.
 
+## ⚡ Início Rápido
+
+### Opção 1: Script Automático (Recomendado)
+
+**Linux/Mac:**
+```bash
+./start.sh
+```
+
+**Windows:**
+```bash
+start.bat
+```
+
+### Opção 2: Manual
+
+1. **Instalar dependências do Backend:**
+```bash
+cd backend
+npm install
+npx prisma generate
+npx prisma migrate dev --name init
+```
+
+2. **Instalar dependências do Frontend:**
+```bash
+cd frontend
+npm install
+```
+
+3. **Executar (em terminais separados):**
+
+Terminal 1 - Backend:
+```bash
+cd backend
+npm run dev
+```
+
+Terminal 2 - Frontend:
+```bash
+cd frontend
+npm run dev
+```
+
+4. **Acessar:** http://localhost:3000
+
 ## 🚀 Funcionalidades
 
 ### 1. Sistema de Notificações de Vencimento
