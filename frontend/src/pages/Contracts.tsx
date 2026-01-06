@@ -82,11 +82,17 @@ export default function Contracts() {
 
       const response = await contractService.generate(contractData);
       
+      // Sanitize filename to prevent path traversal attacks
+      const sanitizedName = selectedClient.nome
+        .replace(/[^a-zA-Z0-9-_]/g, '-')
+        .replace(/-+/g, '-')
+        .toLowerCase();
+      
       // Create a download link
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `contrato-${selectedClient.nome.replace(/\s/g, '-')}.pdf`);
+      link.setAttribute('download', `contrato-${sanitizedName}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();

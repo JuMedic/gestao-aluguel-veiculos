@@ -15,21 +15,26 @@ export class RentalController {
         new Date(dataFim)
       );
 
-      const rental = await prisma.rental.create({
-        data: {
-          vehicleId: parseInt(vehicleId),
-          clientId: parseInt(clientId),
-          dataInicio: new Date(dataInicio),
-          dataFim: new Date(dataFim),
-          valorDiaria: parseFloat(valorDiaria),
-          valorTotal,
-        },
-      });
+      // Use transaction to ensure data consistency
+      const rental = await prisma.$transaction(async (tx) => {
+        const newRental = await tx.rental.create({
+          data: {
+            vehicleId: parseInt(vehicleId),
+            clientId: parseInt(clientId),
+            dataInicio: new Date(dataInicio),
+            dataFim: new Date(dataFim),
+            valorDiaria: parseFloat(valorDiaria),
+            valorTotal,
+          },
+        });
 
-      // Atualizar status do veículo
-      await prisma.vehicle.update({
-        where: { id: parseInt(vehicleId) },
-        data: { status: 'alugado' },
+        // Atualizar status do veículo
+        await tx.vehicle.update({
+          where: { id: parseInt(vehicleId) },
+          data: { status: 'alugado' },
+        });
+
+        return newRental;
       });
 
       return res.status(201).json(rental);
@@ -100,18 +105,23 @@ export class RentalController {
         };
       }
 
-      const rental = await prisma.rental.update({
-        where: { id: parseInt(id) },
-        data: updateData,
-      });
-
-      // Se o aluguel foi finalizado, liberar o veículo
-      if (status === 'finalizado') {
-        await prisma.vehicle.update({
-          where: { id: rental.vehicleId },
-          data: { status: 'disponivel' },
+      // Use transaction when updating status to finalizado
+      const rental = await prisma.$transaction(async (tx) => {
+        const updatedRental = await tx.rental.update({
+          where: { id: parseInt(id) },
+          data: updateData,
         });
-      }
+
+        // Se o aluguel foi finalizado, liberar o veículo
+        if (status === 'finalizado') {
+          await tx.vehicle.update({
+            where: { id: updatedRental.vehicleId },
+            data: { status: 'disponivel' },
+          });
+        }
+
+        return updatedRental;
+      });
 
       return res.json(rental);
     } catch (error: any) {
@@ -122,20 +132,24 @@ export class RentalController {
   async delete(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const rental = await prisma.rental.findUnique({
-        where: { id: parseInt(id) },
-      });
-
-      if (rental) {
-        // Liberar o veículo
-        await prisma.vehicle.update({
-          where: { id: rental.vehicleId },
-          data: { status: 'disponivel' },
+      
+      // Use transaction to ensure data consistency
+      await prisma.$transaction(async (tx) => {
+        const rental = await tx.rental.findUnique({
+          where: { id: parseInt(id) },
         });
-      }
 
-      await prisma.rental.delete({
-        where: { id: parseInt(id) },
+        if (rental) {
+          // Liberar o veículo
+          await tx.vehicle.update({
+            where: { id: rental.vehicleId },
+            data: { status: 'disponivel' },
+          });
+        }
+
+        await tx.rental.delete({
+          where: { id: parseInt(id) },
+        });
       });
 
       return res.status(204).send();
