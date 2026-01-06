@@ -42,7 +42,10 @@ export default function MaintenancePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await maintenanceService.create(formData);
+      await maintenanceService.create({
+        ...formData,
+        vehicleId: Number(formData.vehicleId),
+      });
       setIsModalOpen(false);
       setFormData({
         vehicleId: '',

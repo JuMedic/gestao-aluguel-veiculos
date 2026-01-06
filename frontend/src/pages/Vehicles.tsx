@@ -41,9 +41,15 @@ export default function Vehicles() {
     e.preventDefault();
     try {
       if (editingVehicle) {
-        await vehicleService.update(editingVehicle.id, formData);
+        await vehicleService.update(editingVehicle.id, {
+          ...formData,
+          ano: Number(formData.ano),
+        });
       } else {
-        await vehicleService.create(formData);
+        await vehicleService.create({
+          ...formData,
+          ano: Number(formData.ano),
+        });
       }
       setIsModalOpen(false);
       resetForm();
