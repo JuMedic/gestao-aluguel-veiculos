@@ -8,6 +8,7 @@ import {
   Wrench,
   Camera,
   FileCheck,
+  X,
 } from 'lucide-react';
 
 const menuItems = [
@@ -21,16 +22,28 @@ const menuItems = [
   { path: '/contracts', icon: FileCheck, label: 'Contratos' },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+export default function Sidebar({ onClose }: SidebarProps) {
   return (
     <aside className="bg-gray-900 text-white w-64 min-h-screen">
       <div className="p-6">
-        <div className="flex items-center space-x-2">
-          <Car className="w-8 h-8 text-primary-400" />
-          <div>
-            <h2 className="text-xl font-bold">AutoGest</h2>
-            <p className="text-xs text-gray-400">Gestão de Veículos</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Car className="w-8 h-8 text-primary-400" />
+            <div>
+              <h2 className="text-xl font-bold">AutoGest</h2>
+              <p className="text-xs text-gray-400">Gestão de Veículos</p>
+            </div>
           </div>
+          <button
+            onClick={onClose}
+            className="p-1 rounded hover:bg-gray-800 lg:hidden"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
       </div>
 
@@ -39,6 +52,7 @@ export default function Sidebar() {
           <NavLink
             key={item.path}
             to={item.path}
+            onClick={onClose}
             className={({ isActive }) =>
               `flex items-center space-x-3 px-6 py-3 transition-colors ${
                 isActive

@@ -1,11 +1,21 @@
-import { Bell, User } from 'lucide-react';
+import { Bell, User, Menu } from 'lucide-react';
 
-export default function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+export default function Header({ onMenuClick }: HeaderProps) {
   return (
     <header className="bg-white shadow-sm">
-      <div className="flex items-center justify-between px-6 py-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+      <div className="flex items-center justify-between px-4 md:px-6 py-4">
+        <div className="flex items-center">
+          <button
+            onClick={onMenuClick}
+            className="p-2 mr-2 rounded-md hover:bg-gray-100 lg:hidden"
+          >
+            <Menu className="w-6 h-6 text-gray-600" />
+          </button>
+          <h1 className="text-lg md:text-2xl font-bold text-gray-900">
             Gestão de Aluguel de Veículos
           </h1>
         </div>
