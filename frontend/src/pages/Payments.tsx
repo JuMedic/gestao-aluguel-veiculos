@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DollarSign, AlertCircle } from 'lucide-react';
 import Card from '../components/Card';
 import Table from '../components/Table';

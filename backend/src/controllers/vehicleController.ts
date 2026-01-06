@@ -6,16 +6,17 @@ const prisma = new PrismaClient();
 export class VehicleController {
   async create(req: Request, res: Response) {
     try {
-      const { placa, modelo, marca, ano, cor, foto } = req.body;
+      const { placa, modelo, marca, ano, cor, foto, status } = req.body;
 
       const vehicle = await prisma.vehicle.create({
         data: {
           placa,
           modelo,
           marca,
-          ano: parseInt(ano),
+          ano: typeof ano === 'string' ? parseInt(ano) : ano,
           cor,
           foto,
+          status: status || 'disponivel',
         },
       });
 
@@ -73,7 +74,7 @@ export class VehicleController {
           placa,
           modelo,
           marca,
-          ano: ano ? parseInt(ano) : undefined,
+          ano: ano ? (typeof ano === 'string' ? parseInt(ano) : ano) : undefined,
           cor,
           foto,
           status,
