@@ -46,6 +46,8 @@ export default function MaintenancePage() {
         ...formData,
         vehicleId: Number(formData.vehicleId),
         tipo: formData.tipo as 'preventiva' | 'corretiva',
+        custo: Number(formData.custo),
+        km: Number(formData.km),
       });
       setIsModalOpen(false);
       setFormData({

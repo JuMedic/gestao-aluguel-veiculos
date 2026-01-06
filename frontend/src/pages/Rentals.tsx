@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
 import Card from '../components/Card';
 import Table from '../components/Table';
 import Modal from '../components/Modal';
 import { Form, FormGroup, Input, Select, Button } from '../components/Form';
 import { rentalService, vehicleService, clientService } from '../services/api';
-import { formatCurrency, formatDate, formatDateInput, getStatusColor, getStatusLabel } from '../utils/formatters';
+import { formatCurrency, formatDate, getStatusColor, getStatusLabel } from '../utils/formatters';
 import type { Rental, Vehicle, Client } from '../types';
 
 export default function Rentals() {

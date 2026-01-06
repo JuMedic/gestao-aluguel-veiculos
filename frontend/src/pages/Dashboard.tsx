@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Car, Users, FileText, AlertCircle, DollarSign } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Car, Users, FileText, AlertCircle } from 'lucide-react';
 import Card from '../components/Card';
 import Table from '../components/Table';
 import { vehicleService, clientService, rentalService, paymentService } from '../services/api';

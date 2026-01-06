@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FileText, Download } from 'lucide-react';
 import Card from '../components/Card';
 import { Form, FormGroup, Input, Select, Button } from '../components/Form';
 import { vehicleService, clientService, contractService } from '../services/api';
-import { formatDateInput } from '../utils/formatters';
 import type { Vehicle, Client } from '../types';
 
 export default function Contracts() {
